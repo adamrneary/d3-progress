@@ -1,0 +1,21 @@
+default:
+    - 'build'
+build:
+    - 'clean'
+    - 'copy'
+    - 'sass'
+    - 'coffee'
+    - 'assemble'
+    # - 'useminPrepare'
+    # - 'concat'
+    # - 'cssmin'
+    # - 'uglify'
+    # - 'rev'
+    # - 'usemin'
+server:
+    - 'build'
+    - 'connect:livereload'
+    - 'watch'
+deploy:
+    - 'build'
+    # - 'gh-pages'

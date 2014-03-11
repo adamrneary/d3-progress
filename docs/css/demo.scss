@@ -1,0 +1,68 @@
+/* Demo
+-------------------------------------------------------------- */
+
+h1 {
+  font-size: 50px;
+}
+
+/* Loader
+-------------------------------------------------------------- */
+
+// The outer-most class, which can impact overall positioning
+.loader-content {
+  min-height: 350px;
+
+  // Appended inside the loader-content div
+  .loader-body {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    padding-top: 30px;
+
+    // The SVG object is an easy place to add background images & custom styles
+    svg {
+      display: block;
+      margin: 0 auto;
+      background-image: url("../img/loader.png");
+      background-repeat: no-repeat;
+      background-position: center;
+
+      .progress-meter {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
+      // The "track" on which the progress arc is rendered
+      .background {
+        fill: rgba(0, 0, 0, 0.25);
+      }
+
+      // The progress arc itself
+      .foreground {
+        fill: #1abc9c;
+      }
+
+      // Applies to percentage and status alike
+      text {
+        fill: rgba(51, 51, 51, 0.85);
+        text-shadow: -1px 2px 1px #faf9fa, 0 0 0 #231f20, -1px 2px 1px #faf9fa;
+      }
+
+      // The status text appears above the meter
+      .status {
+        font-size: 26px;
+        font-weight: bold;
+      }
+
+      // The percentage text appears below the meter
+      .percentage {
+        font-size: 54px;
+        font-weight: 800;
+      }
+    }
+  }
+}
