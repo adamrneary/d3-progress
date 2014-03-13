@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>d3-progress.coffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>d3-progress.coffee</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <p>This is a simple abstraction of
+<a href="http://bl.ocks.org/mbostock/3750941">http://bl.ocks.org/mbostock/3750941</a>
+that is also useful in thinking about how to build reusable components from
+<a href="http://d3js.org/">D3</a> examples.</p>
+<h3 id="initial-setup">Initial Setup</h3>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>The top-level namespace. All public D3Progress classes and modules will
+be attached to this. Exported for both CommonJS and the browser.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">if</span> <span class="hljs-built_in">exports</span>?
+  D3Progress = <span class="hljs-built_in">exports</span>
+<span class="hljs-keyword">else</span>
+  D3Progress = <span class="hljs-property">@D3Progress</span> = {}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p><em>Note:</em> Keep this in sync with package.json, componenet.json, and bower.json</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>D3Progress.VERSION = <span class="hljs-string">'0.0.1'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Require d3 if we’re on the server and it’s not already present</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>d3 = <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> d3 <span class="hljs-keyword">and</span> <span class="hljs-built_in">require</span>? <span class="hljs-keyword">then</span> <span class="hljs-built_in">require</span>(<span class="hljs-string">'d3'</span>).d3 <span class="hljs-keyword">else</span> <span class="hljs-property">@d3</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <h2 id="d3progress-meter">D3Progress.Meter</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">D3Progress</span>.<span class="hljs-title">Meter</span></span>
+
+  <span class="hljs-attribute">constructor</span>: <span class="hljs-function"><span class="hljs-params">(args = {})</span> -&gt;</span>
+    <span class="hljs-property">@existingPercentage</span> = <span class="hljs-number">0</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>A valid d3 selector (similar to css selectors) that exists in the DOM. To
+avoid having to pass a selector as an argument, just use a target div
+with <code>id=&quot;loader&quot;</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-property">@selector</span> = args.selector <span class="hljs-keyword">or</span> <span class="hljs-string">'#loader'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p><em>Note:</em> The meter automatically clears the html for the selector on
+initialization.</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>Width and height are typically passed as arguments, but we provide
+defaults if not.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-property">@width</span> = args.width <span class="hljs-keyword">or</span> <span class="hljs-number">960</span>
+    <span class="hljs-property">@height</span> = args.height <span class="hljs-keyword">or</span> <span class="hljs-number">500</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>The dimensions of the progress arc should be set in coordination with the
+overall progress meter’s dimensions.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-property">@innerRadius</span> = args.innerRadius <span class="hljs-keyword">or</span> <span class="hljs-number">180</span>
+    <span class="hljs-property">@outerRadius</span> = args.outerRadius <span class="hljs-keyword">or</span> <span class="hljs-number">240</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>As required, change the formatting of the percent text per the locale.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-property">@formatPercent</span> = d3.format(args.formatPercent <span class="hljs-keyword">or</span> <span class="hljs-string">".0%"</span>)
+
+    <span class="hljs-property">@_build</span>()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <h3 id="building-the-meter">Building the meter</h3>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>The meter is build on initialization. A number of our libraries wait
+until <code>render()</code> is called, but this is not the case for something as
+simple as the progress meter.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">_build</span>:<span class="hljs-function"> -&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>Define a d3 arc that we can use below</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-property">@arc</span> = d3.svg
+      .arc()
+      .startAngle(<span class="hljs-property">@existingPercentage</span>)
+      .innerRadius(<span class="hljs-property">@innerRadius</span>)
+      .outerRadius(<span class="hljs-property">@outerRadius</span>)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>Create the SVG object and canvas onto which we will build our meter</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-property">@svg</span> = d3.select(<span class="hljs-property">@selector</span>)
+        .attr(<span class="hljs-string">"class"</span>, <span class="hljs-string">"loader-wrapper"</span>)
+        .html(<span class="hljs-string">''</span>)
+      .append(<span class="hljs-string">'div'</span>)
+        .attr(<span class="hljs-string">"class"</span>, <span class="hljs-string">"loader-content"</span>)
+      .append(<span class="hljs-string">'div'</span>)
+        .attr(<span class="hljs-string">"class"</span>, <span class="hljs-string">"loader-body"</span>)
+      .append(<span class="hljs-string">"svg"</span>)
+        .attr(<span class="hljs-string">"width"</span>, <span class="hljs-property">@width</span>)
+        .attr(<span class="hljs-string">"height"</span>, <span class="hljs-property">@height</span>)
+      .append(<span class="hljs-string">"g"</span>)
+        .attr(<span class="hljs-string">"transform"</span>, <span class="hljs-string">"translate(<span class="hljs-subst">#{<span class="hljs-property">@width</span> / <span class="hljs-number">2</span>}</span>,<span class="hljs-subst">#{<span class="hljs-property">@height</span> / <span class="hljs-number">2</span>}</span>)"</span>)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>Append the meter canvas itself (allows specific styles for that class)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-property">@meter</span> = <span class="hljs-property">@svg</span>.append(<span class="hljs-string">"g"</span>)
+      .attr(<span class="hljs-string">"class"</span>, <span class="hljs-string">"progress-meter"</span>)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>Create a path for the meter (that will not change) classed “background”</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-property">@meter</span>.append(<span class="hljs-string">"path"</span>)
+      .attr(<span class="hljs-string">"class"</span>, <span class="hljs-string">"background"</span>)
+      .attr <span class="hljs-string">"d"</span>, <span class="hljs-property">@arc</span>.endAngle(<span class="hljs-number">2</span> * Math.PI)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>Create a path for the meter (that will change) classed “foreground”</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-property">@foreground</span> = <span class="hljs-property">@meter</span>.append(<span class="hljs-string">"path"</span>)
+      .attr(<span class="hljs-string">"class"</span>, <span class="hljs-string">"foreground"</span>)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>Add text for the status message</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-property">@status</span> = <span class="hljs-property">@meter</span>.append(<span class="hljs-string">"text"</span>)
+      .attr(<span class="hljs-string">"class"</span>, <span class="hljs-string">"status"</span>)
+      .attr(<span class="hljs-string">"text-anchor"</span>, <span class="hljs-string">"middle"</span>)
+      .text(<span class="hljs-string">'Getting started…'</span>)
+      .attr(<span class="hljs-string">"dy"</span>, <span class="hljs-string">"-4em"</span>)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>Add text for the percentage</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-property">@percentage</span> = <span class="hljs-property">@meter</span>.append(<span class="hljs-string">"text"</span>)
+      .attr(<span class="hljs-string">"class"</span>, <span class="hljs-string">"percentage"</span>)
+      .attr(<span class="hljs-string">"text-anchor"</span>, <span class="hljs-string">"middle"</span>)
+      .text(<span class="hljs-property">@formatPercent</span>(<span class="hljs-property">@existingPercentage</span>))
+      .attr(<span class="hljs-string">"dy"</span>, <span class="hljs-string">"2.5em"</span>)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <h3 id="updating-progress">Updating progress</h3>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p>Update the status text to the message provided, then animate the meter
+along the background track to the percentage provided.</p>
+<p>This method can be bound to subscribed progress events, or it can be
+fired when specific steps in a process have been completed.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">updateProgress</span>: <span class="hljs-function"><span class="hljs-params">(percentage, status)</span> -&gt;</span>
+    <span class="hljs-property">@status</span>.text status
+    <span class="hljs-property">@percentage</span>.text <span class="hljs-property">@formatPercent</span>(percentage)
+
+    i = d3.interpolate(<span class="hljs-property">@existingPercentage</span>, percentage)
+    d3.transition().duration(<span class="hljs-number">500</span>).tween <span class="hljs-string">"progress"</span>,<span class="hljs-function"> =&gt;</span>
+      <span class="hljs-function"><span class="hljs-params">(t)</span> =&gt;</span>
+        progress = i(t)
+        <span class="hljs-property">@foreground</span>.attr <span class="hljs-string">"d"</span>, <span class="hljs-property">@arc</span>.endAngle(<span class="hljs-number">2</span> * Math.PI * percentage)
+
+    <span class="hljs-property">@existingPercentage</span> = percentage</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <h3 id="cleaning-up-and-moving-on">Cleaning up and moving on</h3>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-24">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-24">&#182;</a>
+              </div>
+              <p>This function should be called once the progress is entirely complete.
+The function removes the progress meter itself and then optionally calls
+a provided callback function.</p>
+<p>Since we use the progress meter for long-running initial app load steps,
+the callback function then initializes the single page app and hands over
+control.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">kill</span>: <span class="hljs-function"><span class="hljs-params">(callback)</span> -&gt;</span>
+    <span class="hljs-property">@updateProgress</span>(<span class="hljs-number">1</span>, <span class="hljs-string">'Complete.'</span>)
+    <span class="hljs-property">@status</span>.text <span class="hljs-string">''</span>
+    <span class="hljs-property">@percentage</span>.text <span class="hljs-string">''</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-25">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-25">&#182;</a>
+              </div>
+              <p>Once complete, kill the progress meter entirely by shrinking to nothing</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-property">@meter</span>.transition()
+      .delay(<span class="hljs-number">250</span>)
+      .attr <span class="hljs-string">"transform"</span>, <span class="hljs-string">"scale(0)"</span>
+
+    callback() <span class="hljs-keyword">if</span> callback <span class="hljs-keyword">typeof</span> callback <span class="hljs-keyword">is</span> <span class="hljs-string">'function'</span></pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
