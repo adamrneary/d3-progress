@@ -7,6 +7,6 @@ module.exports =
         "**/*.{scss,sass}"
         "!**/_*.{scss,sass}"
       ]
-      dest: "dist/assets/css/"
+      dest: "tmp/assets/css/"
       ext: ".css"
     ]

@@ -3,9 +3,9 @@ module.exports =
     hostname: "localhost"
     port: 9000
     livereload: 35729
-    base: "dist"
+    base: "tmp"
 
   livereload:
     options:
       open: true
-      base: "dist"
+      base: "tmp"
