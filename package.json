@@ -27,7 +27,7 @@
     "grunt-sass": "~0.10.0",
     "grunt-rev": "~0.1.0",
     "grunt-usemin": "~0.1.10",
-    "grunt-gh-pages": "~0.8.0",
+    "grunt-gh-pages": "^0.9.1",
     "grunt-docco": "^0.3.3"
   }
 }
