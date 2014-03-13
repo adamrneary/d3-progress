@@ -10,4 +10,5 @@
 .DS_Store
 Thumbs.db
 /coverage/*
+.grunt/grunt-gh-pages/gh-pages/
 
