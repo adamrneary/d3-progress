@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>D3 Progress</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="assets/css/032d0780.vendor.min.css">
+
+    <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <link href="assets/css/b132bce4.demo.css" rel="stylesheet">
+
+  </head>
+  <body>
+
+    <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-02">
+        <span class="sr-only">Toggle navigation</span>
+      </button>
+      <a class="navbar-brand" href="#">D3 Progress</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="#navbar-collapse-02">
+      <ul class="nav navbar-nav navbar-right">
+        <li class="active"><a href="index.html#"><i class="fa fa-home"></i> Home</a></li>
+        <li><a href="index.html#js-api"><i class="fa fa-flask"></i> API</a></li>
+        <li><a href="#"><i class="fa fa-code"></i> Annotated Source</a></li>
+        <li><a href="#"><i class="fa fa-github"></i> Github Repo</a></li>
+       </ul>
+    </div>
+  </div>
+</nav>
+    <div class='container'>
+      <div class='row'>
+  <div class='col-xs-12'>
+    <h1>
+      A simple, reusable progress component
+      <p class='lead'>
+        For those times when a horizontal progress meter just won't cut it.
+      </p>
+    </h1>
+  </div>
+</div>
+
+<div class='row'>
+  <div class='col-xs-6'>
+    <div class='well'>
+      <div id="loader"></div>
+      <button class='btn btn-primary btn-block' onclick="resetMeter();">
+        Reset the progress meter
+      </button>
+    </div>
+    <div id="alert"></div>
+  </div>
+  <div class='col-xs-6'>
+    <pre><code class="language-coffeescript">window.<span class="function"><span class="title">resetMeter</span> = -&gt;</span>
+  d3.select(<span class="string">"#alert"</span>).html <span class="string">''</span>
+  meter = <span class="keyword">new</span> D3Progress.Meter
+    <span class="attribute">width</span>: <span class="number">300</span>
+    <span class="attribute">height</span>: <span class="number">300</span>
+    <span class="attribute">innerRadius</span>: <span class="number">52</span>
+    <span class="attribute">outerRadius</span>: <span class="number">63</span>
+  meter.updateProgress <span class="number">.1</span>, <span class="string">'Step 1'</span>
+  setTimeout (<span class="function">-&gt;</span>
+    meter.updateProgress <span class="number">.2</span>, <span class="string">'Step 2'</span>
+    setTimeout (<span class="function">-&gt;</span>
+      i = <span class="number">0</span>
+      timer = setInterval(<span class="function">-&gt;</span>
+        percentage = <span class="number">0.2</span> + <span class="number">0.6</span> * i++ / <span class="number">300</span>
+        meter.updateProgress percentage, <span class="string">'Something granular'</span>
+        clearInterval(timer) <span class="keyword">if</span> i &gt; <span class="number">300</span>
+      , <span class="number">5</span>)
+      setTimeout (<span class="function">-&gt;</span>
+        meter.updateProgress <span class="number">.9</span>, <span class="string">'Step 4'</span>
+        setTimeout (<span class="function">-&gt;</span>
+          meter.kill(fireAlert)
+        ), <span class="number">2000</span>
+      ), <span class="number">2000</span>
+    ), <span class="number">2000</span>
+  ), <span class="number">2000</span>
+
+window.<span class="function"><span class="title">fireAlert</span> = -&gt;</span>
+  d3.select(<span class="string">"#alert"</span>).html <span class="string">"&lt;div class=\"alert alert-success\"&gt;&lt;a class=\"close\" data-dismiss=\"alert\"&gt;×&lt;/a&gt;&lt;h4&gt;Done!&lt;/h4&gt;&lt;p&gt;Use whatever callback makes sense.&lt;/p&gt;&lt;/div&gt;"</span>
+
+resetMeter()</code></pre>
+
+  </div>
+</div>
+
+<div class='row'>
+  <div class='col-xs-12'>
+    <h2 id="api-documentation">API Documentation</h2>
+<h3 id="javascript-api">Javascript API</h3>
+<h4 id="constructor">Constructor</h4>
+<pre><code class="language-javascript">meter = <span class="keyword">new</span> D3Progress.Meter(attributes)</code></pre>
+<p>The following attributes can be set on initialization:</p>
+<ul>
+<li><strong>selector</strong>: A valid d3 selector (similar to css selectors) that exists in the DOM. <em>Note:</em> The meter automatically clears the html for the selector on initialization.</li>
+<li><strong>width and height</strong>: These are the constraints for the svg object itself and will clip long status text.</li>
+<li><strong>innerRadius and outerRadius</strong>: These define the track and animated arc, which can be as thick or thin as you like.</li>
+<li><strong>formatPercent</strong>: A valid d3 format to be applied to the percentage text below the meter.</li>
+</ul>
+<p>The meter is build on initialization. A number of our libraries wait until <code>render()</code> is called, but this is not the case for something as simple as the progress meter.</p>
+<h4 id="methods">Methods</h4>
+<pre><code class="language-javascript">meter.updateProgress(percentage, status)</code></pre>
+<p>Updates the status text to the message provided, then animates the meter along the background track to the percentage provided.</p>
+<p>This method can be bound to subscribed progress events, or it can be fired when specific steps in a process have been completed.</p>
+<pre><code class="language-javascript">meter.kill(callback)</code></pre>
+<p>This function should be called once the progress is entirely complete. The function removes the progress meter itself and then optionally calls a provided callback function.</p>
+<p>Since we use the progress meter for long-running initial app load steps, the callback function then initializes the single page app and hands over control.</p>
+<h3 id="css-api">CSS API</h3>
+<pre><code class="language-scss"><span class="comment">// The outer-most class, which can impact overall positioning</span>
+<span class="class">.loader-content</span> {
+  <span class="comment">// …</span>
+
+  <span class="comment">// Appended inside the loader-content div</span>
+  <span class="class">.loader-body</span> {
+    <span class="comment">// …</span>
+
+    <span class="comment">// The SVG object is an easy place to add background images &amp; custom styles</span>
+    svg {
+      <span class="comment">// …</span>
+
+      <span class="class">.progress-meter</span> {
+        <span class="comment">// …</span>
+      }
+
+      <span class="comment">// The "track" on which the progress arc is rendered</span>
+      <span class="class">.background</span> {
+        <span class="comment">// …</span>
+      }
+
+      <span class="comment">// The progress arc itself</span>
+      <span class="class">.foreground</span> {
+        <span class="comment">// …</span>
+      }
+
+      <span class="comment">// Applies to percentage and status alike</span>
+      <span class="value">text</span> {
+        <span class="comment">// …</span>
+      }
+
+      <span class="comment">// The status text appears above the meter</span>
+      <span class="class">.status</span> {
+        <span class="comment">// …</span>
+      }
+
+      <span class="comment">// The percentage text appears below the meter</span>
+      <span class="class">.percentage</span> {
+        <span class="comment">// …</span>
+      }
+    }
+  }
+}</code></pre>
+
+  </div>
+</div>
+    </div>
+    <footer id="footer" role="contentinfo">
+  <div class="bottom-menu bottom-menu-large bottom-menu-inverse">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-3">
+          <h5 class="title">ABOUT THIS PROTOTYPE</h5>
+          <ul class="bottom-links">
+            <li><a href="#fakelink">What is a prototype?</a></li>
+            <li><a href="#fakelink">Chat right now</a></li>
+            <li><a href="#fakelink">Provide feedback right now</a></li>
+            <li><a href="#fakelink">Get help right now</a></li>
+          </ul>
+        </div>
+
+        <div class="col-sm-4">
+          <h5 class="title">ABOUT CON MOTO</h5>
+          <ul class="bottom-links">
+            <li><a href="#fakelink">Blazingly fast application prototypes</a></li>
+            <li><a href="#fakelink">Platform launch</a></li>
+            <li><a href="#fakelink">Technical advisory</a></li>
+            <li><a href="#fakelink">Doing good in the world</a></li>
+          </ul>
+        </div>
+
+        <div class="col-sm-5">
+          <h5 class="title">DAY 12. PROTOTYPE VERSION 6.1.0</h5>
+          <ul class="bottom-links">
+            <li>Con Moto, LLC. © 2014. All rights reserved.</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</footer>
+
+    <script src="assets/js/18d5d36c.vendor.min.js"></script>
+
+    <script src="assets/js/759f56c7.d3-progress.js"></script>
+    <script src="assets/js/4c1efbe9.demo.js"></script>
+
+  </body>
+</html>
