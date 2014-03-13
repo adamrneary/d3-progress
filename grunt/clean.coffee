@@ -7,4 +7,5 @@ module.exports =
   ]
   dist: [
     'dist/'
+    'tmp/annotated/public/'
   ]

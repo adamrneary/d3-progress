@@ -31,6 +31,7 @@ module.exports =
 
         # Add back in those not handled by concat
         "assets/css/demo.css"
+        "annotated/docco.css"
         "assets/js/d3-progress.js"
         "assets/js/demo.js"
 

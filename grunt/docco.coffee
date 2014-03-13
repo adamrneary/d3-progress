@@ -2,4 +2,5 @@ module.exports =
   document:
     src: ["d3-progress.coffee"]
     options:
-      output: "dist/annotated"
+      output: "tmp/annotated"
+      css: "docs/css/docco.css"

@@ -11,6 +11,7 @@ default:
     - 'assemble'
 'build:dist':
     - 'build:debug'
+    - 'docco'
     - 'clean:dist'
     - 'useminPrepare'
     - 'concat'
