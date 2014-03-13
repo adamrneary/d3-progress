@@ -16,13 +16,13 @@
       if (args == null) {
         args = {};
       }
+      this.existingPercentage = 0;
       this.selector = args.selector || '#loader';
       this.width = args.width || 960;
       this.height = args.height || 500;
       this.innerRadius = args.innerRadius || 180;
       this.outerRadius = args.outerRadius || 240;
       this.formatPercent = d3.format(args.formatPercent || ".0%");
-      this.existingPercentage = 0;
       this._build();
     }
 

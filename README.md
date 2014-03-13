@@ -1,6 +1,7 @@
 # D3-Progress
 
 > **A simple, reusable progress component**
+>
 > For those times when a horizontal progress meter just won't cut it.
 
 This is a simple abstraction of [http://bl.ocks.org/mbostock/3750941](http://bl.ocks.org/mbostock/3750941) that is also useful in thinking about how to build reusable components from [D3](http://d3js.org/) examples.
